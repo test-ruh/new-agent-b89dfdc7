@@ -1,0 +1,91 @@
+infrastructure:
+  - key: PG_CONNECTION_STRING
+    label: PostgreSQL connection string for OpenClaw result storage
+    required: true
+    secret: true
+  - key: DATABASE_URL
+    label: "Application database URL for design-session persistence"
+    required: true
+    secret: true
+  - key: ORG_ID
+    label: OpenClaw organization identifier
+    required: true
+    secret: false
+  - key: AGENT_ID
+    label: OpenClaw agent identifier
+    required: true
+    secret: false
+connector:
+  - key: GITHUB_TOKEN
+    label: GitHub token for repository analysis and approved PR comments
+    required: false
+    secret: true
+  - key: GITHUB_OWNER
+    label: GitHub owner for runtime sync
+    required: false
+    secret: false
+  - key: AGENT_REPO_NAME
+    label: GitHub repo name for runtime sync
+    required: false
+    secret: false
+  - key: AWS_API_KEY
+    label: AWS pricing/reference credential
+    required: false
+    secret: true
+  - key: AWS_REGION
+    label: AWS region
+    required: false
+    secret: false
+  - key: GCP_API_KEY
+    label: GCP pricing/reference credential
+    required: false
+    secret: true
+  - key: GCP_PROJECT_ID
+    label: GCP project ID
+    required: false
+    secret: false
+  - key: AZURE_API_KEY
+    label: Azure pricing/reference credential
+    required: false
+    secret: true
+  - key: AZURE_TENANT_ID
+    label: Azure tenant ID
+    required: false
+    secret: false
+  - key: NOTION_API_KEY
+    label: Notion API key for optional imports
+    required: false
+    secret: true
+  - key: DOCS_API_KEY
+    label: Docs provider API key for optional imports
+    required: false
+    secret: true
+  - key: LINEAR_API_KEY
+    label: Linear API key for approved ticket attachments
+    required: false
+    secret: true
+  - key: JIRA_API_TOKEN
+    label: Jira API token for approved ticket attachments
+    required: false
+    secret: true
+  - key: JIRA_BASE_URL
+    label: Jira base URL
+    required: false
+    secret: false
+  - key: JIRA_EMAIL
+    label: Jira email
+    required: false
+    secret: false
+  - key: VECTOR_DB_URL
+    label: Vector DB URL
+    required: false
+    secret: false
+  - key: VECTOR_DB_API_KEY
+    label: Vector DB API key
+    required: false
+    secret: true
+channel:
+  - key: SLACK_BOT_TOKEN
+    label: Slack bot token for optional Slack channel
+    required: false
+    secret: true

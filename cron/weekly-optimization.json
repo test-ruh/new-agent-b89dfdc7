@@ -1,0 +1,16 @@
+{
+  "name": "weekly-optimization",
+  "enabled": true,
+  "schedule": {
+    "kind": "cron",
+    "expr": "0 8 * * 1",
+    "tz": "UTC"
+  },
+  "sessionTarget": "main",
+  "wakeMode": "scheduled",
+  "payload": {
+    "kind": "agentTurn",
+    "message": "Run the weekly-optimization workflow: review active AutoSys Architect sessions and connected repositories for cost, scaling, reliability, and simplification opportunities.",
+    "timeoutSeconds": 600
+  }
+}

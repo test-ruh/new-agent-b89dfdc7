@@ -1,0 +1,49 @@
+version: 1
+name: main
+steps:
+  - id: data-writer
+    type: skill
+    skill: data-writer
+  - id: extract-requirements
+    type: skill
+    skill: extract-requirements
+  - id: clarify-if-needed
+    type: native-tool
+    tool: message
+    depends_on: ["extract-requirements"]
+  - id: retrieve-design-knowledge
+    type: skill
+    skill: retrieve-design-knowledge
+    depends_on: ["extract-requirements"]
+  - id: analyze-repository
+    type: skill
+    skill: analyze-repository
+    depends_on: ["extract-requirements"]
+  - id: estimate-cloud-cost
+    type: skill
+    skill: estimate-cloud-cost
+    depends_on: ["extract-requirements", "retrieve-design-knowledge"]
+  - id: generate-architecture
+    type: skill
+    skill: generate-architecture
+    depends_on: ["extract-requirements", "retrieve-design-knowledge", "analyze-repository", "estimate-cloud-cost"]
+  - id: generate-diagram
+    type: skill
+    skill: generate-diagram
+    depends_on: ["generate-architecture"]
+  - id: persist-design-session
+    type: skill
+    skill: persist-design-session
+    depends_on: ["generate-architecture", "generate-diagram"]
+  - id: deliver-response
+    type: native-tool
+    tool: message
+    depends_on: ["persist-design-session"]
+  - id: post-github-suggestion
+    type: skill
+    skill: post-github-suggestion
+    depends_on: ["analyze-repository", "generate-architecture"]
+  - id: attach-design-to-ticket
+    type: skill
+    skill: attach-design-to-ticket
+    depends_on: ["generate-architecture", "generate-diagram"]

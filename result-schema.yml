@@ -1,0 +1,364 @@
+version: "1.0"
+agent_id: "autosys-architect"
+
+tables:
+  result_design_sessions:
+    description: Tracks each user architecture request and lifecycle.
+    writable: true
+    write_mode: upsert
+    columns:
+      run_id:
+        type: text
+        required: true
+      id:
+        type: uuid
+        required: true
+      session_id:
+        type: text
+        required: true
+        max_length: 120
+      user_id:
+        type: text
+        max_length: 120
+      channel:
+        type: text
+        required: true
+        max_length: 40
+      product_idea:
+        type: text
+        required: true
+      current_status:
+        type: text
+        required: true
+        max_length: 40
+      assumptions:
+        type: jsonb
+      created_at:
+        type: datetime
+        required: true
+      updated_at:
+        type: datetime
+        required: true
+    conflict_columns:
+      - session_id
+    indexes:
+      - columns: [session_id]
+        name: idx_result_design_sessions_session_id
+      - columns: [user_id]
+        name: idx_result_design_sessions_user_id
+      - columns: [channel]
+        name: idx_result_design_sessions_channel
+      - columns: [current_status]
+        name: idx_result_design_sessions_current_status
+  result_constraints:
+    description: Stores normalized design constraints and requirement changes.
+    writable: true
+    write_mode: upsert
+    columns:
+      run_id:
+        type: text
+        required: true
+      id:
+        type: uuid
+        required: true
+      constraint_id:
+        type: text
+        required: true
+        max_length: 120
+      session_id:
+        type: text
+        required: true
+        max_length: 120
+      constraint_type:
+        type: text
+        required: true
+        max_length: 60
+      constraint_value:
+        type: text
+        required: true
+      source:
+        type: text
+        max_length: 80
+      priority:
+        type: text
+        max_length: 20
+      created_at:
+        type: datetime
+        required: true
+    conflict_columns:
+      - constraint_id
+    indexes:
+      - columns: [session_id]
+        name: idx_result_constraints_session_id
+      - columns: [constraint_type]
+        name: idx_result_constraints_type
+  result_architecture_recommendations:
+    description: Stores generated architecture proposals and tradeoffs.
+    writable: true
+    write_mode: upsert
+    columns:
+      run_id:
+        type: text
+        required: true
+      id:
+        type: uuid
+        required: true
+      recommendation_id:
+        type: text
+        required: true
+        max_length: 120
+      session_id:
+        type: text
+        required: true
+        max_length: 120
+      title:
+        type: text
+        required: true
+        max_length: 200
+      architecture_style:
+        type: text
+        required: true
+        max_length: 80
+      summary:
+        type: text
+        required: true
+      components:
+        type: jsonb
+        required: true
+      tradeoffs:
+        type: jsonb
+        required: true
+      scaling_plan:
+        type: text
+      reliability_notes:
+        type: text
+      version:
+        type: integer
+        required: true
+      created_at:
+        type: datetime
+        required: true
+    conflict_columns:
+      - recommendation_id
+    indexes:
+      - columns: [session_id]
+        name: idx_result_architecture_recommendations_session_id
+      - columns: [architecture_style]
+        name: idx_result_architecture_recommendations_style
+  result_diagrams:
+    description: Stores Mermaid or diagram text for architecture visuals.
+    writable: true
+    write_mode: upsert
+    columns:
+      run_id:
+        type: text
+        required: true
+      id:
+        type: uuid
+        required: true
+      diagram_id:
+        type: text
+        required: true
+        max_length: 120
+      recommendation_id:
+        type: text
+        required: true
+        max_length: 120
+      diagram_type:
+        type: text
+        required: true
+        max_length: 40
+      title:
+        type: text
+        required: true
+        max_length: 160
+      body:
+        type: text
+        required: true
+      created_at:
+        type: datetime
+        required: true
+    conflict_columns:
+      - diagram_id
+    indexes:
+      - columns: [recommendation_id]
+        name: idx_result_diagrams_recommendation_id
+      - columns: [diagram_type]
+        name: idx_result_diagrams_type
+  result_cost_estimates:
+    description: Stores rough monthly infrastructure cost ranges and assumptions.
+    writable: true
+    write_mode: upsert
+    columns:
+      run_id:
+        type: text
+        required: true
+      id:
+        type: uuid
+        required: true
+      estimate_id:
+        type: text
+        required: true
+        max_length: 120
+      recommendation_id:
+        type: text
+        required: true
+        max_length: 120
+      cloud_provider:
+        type: text
+        max_length: 40
+      monthly_low_usd:
+        type: float
+      monthly_high_usd:
+        type: float
+      assumptions:
+        type: jsonb
+        required: true
+      cost_drivers:
+        type: jsonb
+      confidence:
+        type: text
+        required: true
+        max_length: 20
+      created_at:
+        type: datetime
+        required: true
+    conflict_columns:
+      - estimate_id
+    indexes:
+      - columns: [recommendation_id]
+        name: idx_result_cost_estimates_recommendation_id
+      - columns: [cloud_provider]
+        name: idx_result_cost_estimates_provider
+  result_knowledge_references:
+    description: "Stores retrieved patterns, benchmarks, pricing references, and prior approved sessions used in an answer."
+    writable: true
+    write_mode: upsert
+    columns:
+      run_id:
+        type: text
+        required: true
+      id:
+        type: uuid
+        required: true
+      reference_id:
+        type: text
+        required: true
+        max_length: 160
+      session_id:
+        type: text
+        required: true
+        max_length: 120
+      recommendation_id:
+        type: text
+        max_length: 120
+      reference_type:
+        type: text
+        required: true
+        max_length: 60
+      title:
+        type: text
+        required: true
+        max_length: 200
+      source_uri:
+        type: text
+        max_length: 500
+      excerpt:
+        type: text
+      metadata:
+        type: jsonb
+      created_at:
+        type: datetime
+        required: true
+    conflict_columns:
+      - reference_id
+    indexes:
+      - columns: [session_id]
+        name: idx_result_knowledge_references_session_id
+      - columns: [recommendation_id]
+        name: idx_result_knowledge_references_recommendation_id
+      - columns: [reference_type]
+        name: idx_result_knowledge_references_type
+  result_repo_analyses:
+    description: Stores GitHub repository or PR architecture analysis summaries.
+    writable: true
+    write_mode: upsert
+    columns:
+      run_id:
+        type: text
+        required: true
+      id:
+        type: uuid
+        required: true
+      repo_analysis_id:
+        type: text
+        required: true
+        max_length: 160
+      session_id:
+        type: text
+        max_length: 120
+      repository:
+        type: text
+        required: true
+        max_length: 240
+      pull_request_id:
+        type: text
+        max_length: 80
+      detected_stack:
+        type: jsonb
+      architecture_findings:
+        type: jsonb
+        required: true
+      comment_posted:
+        type: boolean
+        required: true
+      analyzed_at:
+        type: datetime
+        required: true
+    conflict_columns:
+      - repo_analysis_id
+    indexes:
+      - columns: [session_id]
+        name: idx_result_repo_analyses_session_id
+      - columns: [repository]
+        name: idx_result_repo_analyses_repository
+      - columns: [pull_request_id]
+        name: idx_result_repo_analyses_pr
+  result_user_feedback:
+    description: "Stores user ratings, comments, and usefulness signals."
+    writable: true
+    write_mode: upsert
+    columns:
+      run_id:
+        type: text
+        required: true
+      id:
+        type: uuid
+        required: true
+      feedback_id:
+        type: text
+        required: true
+        max_length: 120
+      session_id:
+        type: text
+        required: true
+        max_length: 120
+      recommendation_id:
+        type: text
+        max_length: 120
+      rating:
+        type: integer
+      comment:
+        type: text
+      feedback_tags:
+        type: jsonb
+      created_at:
+        type: datetime
+        required: true
+    conflict_columns:
+      - feedback_id
+    indexes:
+      - columns: [session_id]
+        name: idx_result_user_feedback_session_id
+      - columns: [recommendation_id]
+        name: idx_result_user_feedback_recommendation_id
